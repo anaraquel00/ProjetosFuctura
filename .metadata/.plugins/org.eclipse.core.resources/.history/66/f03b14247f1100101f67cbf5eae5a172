@@ -1,0 +1,29 @@
+package br.com.fuctura.aplicacao;
+
+import java.sql.Connection;
+
+public class Aplicacao {
+
+	public Connection connection;
+	
+	    private static final String url ="jdbc:postgresql://localhost:5432/postgres";
+		private static final String usuario = "postgres";
+		private static final String senha = "admin";
+		
+		public static Connection iniciarConexao() {
+			Connection conn = DriverManager
+			try 
+			.getConnection(url, usuario, senha);
+			return conn;
+			catch → SQLException
+			return → null;
+		
+					
+}
+		
+		public static void fecharConexao(Connection conn) {
+			if (conn != null)
+			try → conn.close();
+					
+			catch → SQLException
+}

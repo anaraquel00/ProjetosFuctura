@@ -1,0 +1,13 @@
+INDEX VERSION 1.134+/media/ana/739fe900-d3aa-4aa2-b9d1-436f6a077d755/home/ana/ProjetosFuctura/.metadata/.plugins/org.eclipse.jdt.core
+2326257059.index
+1305595385.index
+2785848276.index
+2011692926.index
+2723601360.index
+1865797976.index
+3119954569.index
+2118311597.index
+2204112704.index
+169739039.index
+1869920338.index
+3728666753.index

@@ -1,0 +1,46 @@
+package br.com.fuctura.aplicacao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.Scanner;
+
+public class Aplicacao {
+
+	public Connection connection;
+	
+	    private static final String url ="jdbc:postgresql://localhost:5432/postgres";
+		private static final String usuario = "postgres";
+		private static final String senha = "admin";
+		
+		public static Connection iniciarConexao() {
+			Connection conn = DriverManager;
+			try 
+			.getConnection(url, usuario, senha);
+			return conn;
+			catch → SQLException
+			return → null;
+		
+		}
+		
+		Scanner scan = new Scanner(System.in);
+					Connection conn = ConexaoBanco.iniciarConexao();
+					if (conn != null) {
+					System.out.println("Digite o nome do contato:");
+					String nome = scan.nextLine();
+					System.out.println("Digite o telefone do contato:");
+					String telefone = scan.nextLine();
+		
+		
+		
+		
+		
+		public static void fecharConexao(Connection conn) {
+			if (conn != null)
+			try → conn.close();
+					
+			catch → SQLException
+			
+			
+			
+			
+}

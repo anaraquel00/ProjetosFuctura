@@ -1,0 +1,13 @@
+package br.com.fuctura.aplicacao;
+
+import java.sql.Connection;
+
+public class Aplicacao {
+
+	public Connection connection;
+	
+	    private static final String URL=jdbc:postgresql://localhost:5432/postgres;
+		private static final String usuario = "postgres";
+		private static final String senha = "admin";
+	
+}
