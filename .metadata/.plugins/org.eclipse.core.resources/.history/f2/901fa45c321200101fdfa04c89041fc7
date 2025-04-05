@@ -1,0 +1,125 @@
+package br.com.fuctura;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class Aula3 {
+    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String USUARIO = "postgres";
+    private static final String SENHA = "admin";
+    
+    public static void main(String[] args) {
+        Connection conn = iniciarConexao();
+        
+        if (conn != null) {
+            try (Scanner scan = new Scanner(System.in)) {
+                // Cadastro do cliente
+                System.out.println("Digite o nome do cliente:");
+                String nome = scan.nextLine();
+                
+                System.out.println("Digite o CPF do cliente:");
+                String cpf = scan.nextLine();
+                
+                // Inserir cliente no banco de dados
+                String sqlCliente = "INSERT INTO cliente (nome, cpf) VALUES (?, ?)";
+                Integer codigoCliente = null;
+                
+                try (PreparedStatement stmt = conn.prepareStatement(sqlCliente, Statement.RETURN_GENERATED_KEYS)) {
+                    stmt.setString(1, nome);
+                    stmt.setString(2, cpf);
+                    
+                    int affectedRows = stmt.executeUpdate();
+                    
+                    if (affectedRows > 0) {
+                        try (ResultSet rs = stmt.getGeneratedKeys()) {
+                            if (rs.next()) {
+                                codigoCliente = rs.getInt(1);
+                                System.out.println("ID do cliente inserido: " + codigoCliente);
+                            }
+                        }
+                        System.out.println("Cliente cadastrado com sucesso!");
+                    } else {
+                        System.out.println("Nenhum cliente foi cadastrado!");
+                    }
+                }
+                
+                // Cadastro do endereço
+                if (codigoCliente != null) {
+                    System.out.println("Digite o logradouro do cliente:");
+                    String logradouro = scan.nextLine();
+                    
+                    String sqlEndereco = "INSERT INTO endereco (logradouro, cliente_id) VALUES (?, ?)";
+                    try (PreparedStatement stmt = conn.prepareStatement(sqlEndereco, Statement.RETURN_GENERATED_KEYS)) {
+                        stmt.setInt(1, codigoCliente);
+                        stmt.setString(2, logradouro);
+                        int affectedRows = stmt.executeUpdate();
+                        
+                        Integer codigoEndereco =null;
+                        
+                        if (affectedRows > 0) {
+                            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                                if (rs.next()) {
+                                    codigoEndereco = rs.getInt(1);
+                                    System.out.println("ID do endereço inserido: " + codigoEndereco);
+                                }
+                            }
+                            System.out.println("Endereço cadastrado com sucesso!");
+                        } else {
+                            System.out.println("Nenhum endereço foi cadastrado!");
+                        }
+                    }
+                        
+                          } else {
+                    System.out.println("Não foi possível cadastrar endereço - cliente não inserido!");
+                }
+              
+                String sqlCliente_Endereco = "INSERT INTO endereco (endereco_id, cliente_id) VALUES (?, ?)";
+                PreparedStatement stmt2 = conn.prepareStatement(sqlCliente_Endereco, Statement.RETURN_GENERATED_KEYS); {
+                    int codigoEndereco;
+					stmt2.setInt(1, codigoEndereco);
+                    stmt2.setInt(2, codigoCliente);
+                    stmt2.execute();
+                    
+                   
+                        
+                        System.out.println("Endereço cadastrado com sucesso!");
+                    } {
+                        System.out.println("Nenhum endereço foi cadastrado!");
+                    }
+                }
+                
+                
+            catch (SQLException e) {
+                System.err.println("Erro ao executar operação no banco: " + e.getMessage());
+            } finally {
+                fecharConexao(conn);
+            }
+        } else {
+            System.out.println("Falha na conexão com o banco de dados!");
+        }
+    }
+    
+    public static Connection iniciarConexao() {
+        try {
+            return DriverManager.getConnection(URL, USUARIO, SENHA);
+        } catch (SQLException e) {
+            System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public static void fecharConexao(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar conexão: " + e.getMessage());
+            }
+        }
+    }
+}
